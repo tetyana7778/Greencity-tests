@@ -68,7 +68,7 @@
 
 
 
-## TC-5: Page Load Performance on Events Page
+## TC-05: Page Load Performance on Events Page
 
 **Preconditions:**
 - The user has a stable internet connection.
