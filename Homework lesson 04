@@ -1,0 +1,75 @@
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
+
+
+class TestSignInModal(unittest.TestCase):
+    BASE_URL = "https://www.greencity.cx.ua/#/greenCity"
+
+    def setUp(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument("--start-maximized")
+        self.driver = webdriver.Chrome(options=options)
+        self.driver.implicitly_wait(10)
+        self.driver.get(self.BASE_URL)
+        sleep(2)
+
+        # Чистимо старі дані і встановлюємо англійську
+        self.driver.delete_all_cookies()
+        self.driver.execute_script("localStorage.clear();")
+        self.driver.execute_script("localStorage.setItem('language', 'en');")
+        self.driver.refresh()
+        sleep(2)
+
+    def test_open_site(self):
+        sleep(3)
+        print("Браузер відкрито, перевірка завершена!")
+
+    def test_click_status_events(self):
+        # Клік на Events через href
+        events_link = self.driver.find_element(
+            By.XPATH, '//a[contains(@href, "events")]'
+        )
+        events_link.click()
+        print("Перехід на сторінку подій...")
+    
+        #  М'який локатор + явне очікування
+        wait = WebDriverWait(self.driver, 15)
+        status_filter = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//mat-label[contains(., "Status")]')
+            )
+        )
+        status_filter.click()
+        print("Клік по фільтру Status виконано!")
+        sleep(2)
+    def test_search_open_events(self):
+        #  Клік на Events через href
+        events_link = self.driver.find_element(
+            By.XPATH, '//a[contains(@href, "events")]'
+        )
+        events_link.click()
+        wait = WebDriverWait(self.driver, 15)
+        status_filter = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//mat-label[contains(., "Status")]')
+            )
+        )
+        status_filter.click()
+        status_open = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//span[contains(., "Open")]')
+            )
+        )
+        status_open.click()
+        print("Пошук відкритих подій виконано ")
+
+def tearDown(self):
+        self.driver.quit()
+
+
+if __name__ == "__main__":
+    unittest.main()
