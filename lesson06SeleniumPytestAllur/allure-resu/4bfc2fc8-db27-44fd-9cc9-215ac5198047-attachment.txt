@@ -1,0 +1,1 @@
+DEBUG: Email from config is testtetiana@test.com
